@@ -17,7 +17,8 @@ spec:
       hostIPC: true
       containers:
       - name: orion-client-hvd
-        image: 172.16.112.220:30006/library/ubuntu-tensorflow:2.3.0  # 可自行更改镜像和版本
+        imagePullPolicy: Always
+        image: harbor.iiis.co/library/ubuntu-tensorflow:2.3.0  # 可自行更改镜像和版本
         command: ["bash", "-c", "--"]
         args: ["while true; do sleep 30; done;"]
         resources:
@@ -45,14 +46,9 @@ spec:
               fieldRef:
                 fieldPath: metadata.uid
         volumeMounts:
-        - name: my-local-disk-1  # 与下面volumes的名字对应
-          mountPath: /mnt/data1  # 本地的挂载点
-        - name: my-local-disk-2  # 与下面volumes的名字对应
-          mountPath: /mnt/data2  # 本地的挂载点
+        - name: share-nfs  # 和下面的名字对应
+          mountPath: /sharenfs # POD文件系统中的挂载点
       volumes:
-        - name: my-local-disk-1
-          hostPath:
-            path: /data  # 大小3.7T
-        - name: my-local-disk-2
-          hostPath:
-            path: /data2 # 大小3.0T
+        - name: share-nfs  # 和上面的名字对应
+          persistentVolumeClaim:
+            claimName: my-nfs-pvc

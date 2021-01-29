@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-  name: my-first-ubuntu-tf
+  name: my-first-ubuntu-tf-nfs
 spec:
   replicas: 1
   selector:
@@ -17,7 +17,8 @@ spec:
       hostIPC: true
       containers:
       - name: orion-client-hvd
-        image: 172.16.112.220:30006/library/ubuntu-tensorflow:2.3.0  # 可自行更改镜像和版本
+        imagePullPolicy: Always
+        image: harbor.iiis.co/library/ubuntu-tensorflow:2.3.0  # 可自行更改镜像和版本
         command: ["bash", "-c", "--"]
         args: ["while true; do sleep 30; done;"]
         resources:
@@ -50,5 +51,5 @@ spec:
       volumes:
         - name: share-nfs  # 和上面的名字对应
           nfs:
-            server: 172.16.112.172
-            path: /data/nfs_data/share
+            server: 172.16.112.175  #使用IP地址挂接nfs，可以实现多用户访问共享数据，但没有隐私性和可靠性保证（存储后端没有Raid）
+            path: /nfs_data/share
