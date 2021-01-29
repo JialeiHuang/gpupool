@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: ResourceQuota
 metadata:
-  name: mem-cpu-quota
+  name: jialei
 spec:
   hard:
-    requests.cpu: "40"
-    requests.memory: 300Gi
-    limits.cpu: "1000"
+    requests.cpu: "200"
+    requests.memory: 1000Gi
+    limits.cpu: "400"
     limits.memory: 6000Gi
